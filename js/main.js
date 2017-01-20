@@ -25,6 +25,8 @@
 
  keysPressed = {};
 
+ images = [];
+
  window.addEventListener("keydown", function(e) {
          keysDown[e.keyCode] = true;
          return keysPressed[e.keyCode] = true;
@@ -89,38 +91,51 @@ x: 100,
  };
 
  draw = function(delta) {
+     ctx.fillStyle = "#FFFFFF";
+     ctx.fillRect(0, 0, c.width, c.height);
 
-     var imageData = ctx.getImageData(0, 0, c.width, c.height);
+     ctx.fillStyle = "#000000";
+     ctx.fillRect(50, 200, 40, 20);
+
+     ctx.fillRect(player.x, player.y, 20, 50);
+
+     var imageData = btx.getImageData(0, 0, cc.width, cc.height);
      var data = imageData.data;
 
-     var newImageData = ctx.createImageData(c.width, c.height)
+     var newImageData = btx.createImageData(cc.width, cc.height)
      var newData = newImageData.data;
 
-     for(var i = 0; i < data.length; i += 4) {
-         var x = (i / 4) % c.width;
-         var y = parseInt((i / 4) / c.width);
+     for(var i = 0; i < newData.length; i += 4) {
+         newData[i] = 255;
+         newData[i + 1] = 255;
+         newData[i + 2] = 255;
+         newData[i + 3] = 0;
+     }
 
-         if(data[i] !== 0) {
+     for(var i = 0; i < data.length; i += 4) {
+         var x = (i / 4) % cc.width;
+         var y = parseInt((i / 4) / cc.width);
+
+         if(data[i] !== 255) {
              if(elapsed <= 10) {
                  // WONSZ
-                 y += parseInt(Math.sin(x / 20 + elapsed * 5) * elapsed);
+                 y += parseInt(Math.sin(x / 20 + elapsed * 5) * elapsed * 0.3);
              } else {
                  // JEB
                  y += parseInt(Math.random() * 24);
                  x += parseInt(Math.random() * 10 - 5);
              }
 
-             newData[4 * (y * c.width + x) + 0] = data[i + 0]
-             newData[4 * (y * c.width + x) + 1] = data[i + 1]
-             newData[4 * (y * c.width + x) + 2] = data[i + 2]
-             newData[4 * (y * c.width + x) + 3] = data[i + 3]
+             newData[4 * (y * cc.width + x) + 0] = data[i + 0]
+             newData[4 * (y * cc.width + x) + 1] = data[i + 1]
+             newData[4 * (y * cc.width + x) + 2] = data[i + 2]
+             newData[4 * (y * cc.width + x) + 3] = data[i + 3]
          }
      }
 
-     ctx.putImageData(newImageData, 0, 0)
+     btx.putImageData(newImageData, 0, 0)
 
-     ctx.save();
-     return ctx.restore();
+     ctx.drawImage(cc, 200, 100)
  };
 
  (function() {
@@ -146,11 +161,35 @@ x: 100,
   }
  })();
 
+ loadImage = function(name) {
+    img = new Image()
+    console.log('loading')
+    loading += 1
+    img.onload = function() {
+        console.log('loaded')
+        images[name] = img
+        loading -= 1
+    }
+
+    img.src = 'img/' + name + '.png'
+ }
+
+ loadImage("bridge");
+
+ cc = document.createElement("canvas")
+ cc.width = 400
+ cc.height = 400
+ btx = cc.getContext("2d");
+
  load = function() {
-     ctx.clearRect(0, 0, c.width, c.height);
-     ctx.fillStyle = "#FFFFFF";
-     ctx.fillRect(300, 200, 400, 20);
-     return window.requestAnimationFrame(tick);
+     if(loading) {
+         window.requestAnimationFrame(load);
+     } else {
+         btx.fillStyle = "#FFFFFF";
+         btx.fillRect(0, 0, cc.width, cc.height);
+         btx.drawImage(images["bridge"], 0, 0);
+         window.requestAnimationFrame(tick);
+     }
  };
 
  load();
