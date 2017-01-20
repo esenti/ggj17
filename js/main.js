@@ -89,9 +89,36 @@ x: 100,
  };
 
  draw = function(delta) {
-     ctx.clearRect(0, 0, c.width, c.height);
-     ctx.fillStyle = "#FFFFFF";
-     ctx.fillRect(player.x, player.y, 32, 32);
+
+     var imageData = ctx.getImageData(0, 0, c.width, c.height);
+     var data = imageData.data;
+
+     var newImageData = ctx.createImageData(c.width, c.height)
+     var newData = newImageData.data;
+
+     for(var i = 0; i < data.length; i += 4) {
+         var x = (i / 4) % c.width;
+         var y = parseInt((i / 4) / c.width);
+
+         if(data[i] !== 0) {
+             if(elapsed <= 10) {
+                 // WONSZ
+                 y += parseInt(Math.sin(x / 20 + elapsed * 5) * elapsed);
+             } else {
+                 // JEB
+                 y += parseInt(Math.random() * 24);
+                 x += parseInt(Math.random() * 10 - 5);
+             }
+
+             newData[4 * (y * c.width + x) + 0] = data[i + 0]
+             newData[4 * (y * c.width + x) + 1] = data[i + 1]
+             newData[4 * (y * c.width + x) + 2] = data[i + 2]
+             newData[4 * (y * c.width + x) + 3] = data[i + 3]
+         }
+     }
+
+     ctx.putImageData(newImageData, 0, 0)
+
      ctx.save();
      return ctx.restore();
  };
@@ -120,6 +147,9 @@ x: 100,
  })();
 
  load = function() {
+     ctx.clearRect(0, 0, c.width, c.height);
+     ctx.fillStyle = "#FFFFFF";
+     ctx.fillRect(300, 200, 400, 20);
      return window.requestAnimationFrame(tick);
  };
 
