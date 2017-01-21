@@ -114,16 +114,16 @@ x: 100,
 
      for(var i = 0; i < data.length; i += 4) {
          var x = (i / 4) % cc.width;
-         var y = parseInt((i / 4) / cc.width);
+         var y = Math.floor((i / 4) / cc.width);
 
          if(data[i] !== 255) {
              if(elapsed <= 10) {
                  // WONSZ
-                 y += parseInt(Math.sin(x / 20 + elapsed * 5) * elapsed * 0.3);
+                 y += Math.floor(Math.sin(x / 20 + elapsed * 5) * elapsed * 0.3);
              } else {
                  // JEB
-                 y += parseInt(Math.random() * 24);
-                 x += parseInt(Math.random() * 10 - 5);
+                 y += Math.floor(Math.random() * 24);
+                 x += Math.floor(Math.random() * 10 - 5);
              }
 
              newData[4 * (y * cc.width + x) + 0] = data[i + 0]
@@ -187,7 +187,7 @@ x: 100,
      } else {
          btx.fillStyle = "#FFFFFF";
          btx.fillRect(0, 0, cc.width, cc.height);
-         btx.drawImage(images["bridge"], 0, 0);
+         btx.drawImage(images["bridge"], 0, 100);
          window.requestAnimationFrame(tick);
      }
  };
