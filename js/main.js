@@ -33,6 +33,10 @@
 
  audios = [];
 
+ framesThisSecond = 0;
+ fpsElapsed = 0;
+ fps = 0
+
  jumping = 100;
  amplitude = 0;
  moving = false;
@@ -125,6 +129,13 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
 }
 
  update = function(delta) {
+     framesThisSecond += 1;
+     fpsElapsed += delta;
+     if(fpsElapsed >= 1) {
+        fps = framesThisSecond / fpsElapsed;
+        framesThisSecond = fpsElapsed = 0;
+     }
+
      if(keysDown[65]) {
          player.x -= delta * 100;
          if(!moving) {
@@ -171,8 +182,15 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
 
  draw = function(delta) {
      frame_counter = (frame_counter + 1) % fps_limit;
+
      ctx.fillStyle = "#FFFFFF";
      ctx.fillRect(0, 0, c.width, c.height);
+
+     if(DEBUG) {
+        ctx.fillStyle = "#888888";
+        ctx.font = "20px Sans";
+        ctx.fillText(Math.round(fps), 10, 20);
+     }
 
      ctx.fillStyle = "#888888";
      ctx.drawImage(images["house1"], 520 - player.x / 20, 400)
@@ -244,7 +262,7 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
              for(var y = 0; y < cc.height; y += 1) {
                  var i = 4 * (y * cc.width + x);
                  var nx = x;
-                 var ny = y
+                 var ny = y;
 
                  if(data[i] !== 255) {
                      // JEB
@@ -350,7 +368,7 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
      }
  }
 
- yRandom = makeRandom(0, 24);
+ yRandom = makeRandom(0, 12);
  xRandom = makeRandom(-5, 5)
 
  load = function() {
