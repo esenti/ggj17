@@ -234,8 +234,8 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
                  y += Math.floor(Math.sin(x / 20 + elapsed * 5) * amplitude);
              } else {
                  // JEB
-                 y += Math.floor(Math.random() * 24);
-                 x += Math.floor(Math.random() * 10 - 5);
+                 y += yRandom()
+                 x += xRandom()
              }
 
              newData[4 * (y * cc.width + x) + 0] = data[i + 0]
@@ -319,6 +319,21 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
  cc.width = 800
  cc.height = 500
  btx = cc.getContext("2d");
+
+ makeRandom = function(min, max) {
+     for (var i=1e6, lookupTable=[]; i--;) {
+        lookupTable.push(Math.floor(Math.random() * (max - min) + min));
+     }
+
+     var lookupCounter = 0
+
+     return function() {
+        return ++lookupCounter >= lookupTable.length ? lookupTable[lookupCounter=0] : lookupTable[lookupCounter];
+     }
+ }
+
+ yRandom = makeRandom(0, 24);
+ xRandom = makeRandom(-5, 5)
 
  load = function() {
      if(loading) {
