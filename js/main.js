@@ -26,6 +26,10 @@
  keysPressed = {};
 
  images = [];
+ animations = [];
+ player_animation_frame = 0;
+ frame_counter = 0;
+ fps_limit = 60;
 
  jumping = 100;
  amplitude = 0;
@@ -83,6 +87,34 @@
      }
  };
 
+    /**
+    name - image name
+    s_width - sheet width (columns)
+    s_height - sheet height (rows)
+    f_width - frame width (pixels)
+    f_height - frame height (pixels)
+    **/
+
+animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit) {
+    var img = images[name];
+    var number = 0;
+    return function(ctx, dx, dy, dw=false, dh=false) {
+        if (frame_counter % fps == 0)
+            number ++;
+        number = number % limit;
+        var y = Math.floor(number / s_width);
+        var x = number - (y * s_width);
+        if (dw != false && dh != false) {
+            return ctx.drawImage(img, f_width * x, f_height * y,
+                             f_width, f_height, dx, dy, dw, dh);
+        } else {
+            return ctx.drawImage(img, f_width * x, f_height * y,
+                             f_width, f_height, dx, dy, f_width, f_height);
+        }
+
+    }
+}
+
  update = function(delta) {
      if(keysDown[65]) {
          player.x -= delta * 100;
@@ -109,6 +141,7 @@
  };
 
  draw = function(delta) {
+     frame_counter = (frame_counter + 1) % fps_limit;
      ctx.fillStyle = "#FFFFFF";
      ctx.fillRect(0, 0, c.width, c.height);
 
@@ -117,7 +150,8 @@
      ctx.drawImage(images["house2"], 70 - player.x / 20, 260)
      ctx.drawImage(images["house3"], 300 - player.x / 40, 80)
 
-     ctx.drawImage(images["meskam"], player.x, player.y);
+     //ctx.drawImage(images["meskam"], player.x, player.y);
+     animations["jump"](ctx, player.x, player.y, 60, 60);
      ctx.drawImage(images["bridge/background"], 0, 200);
      ctx.drawImage(images["bridge/base"], 0, 200);
 
@@ -191,7 +225,7 @@
   }
  })();
 
- loadImage = function(name) {
+ loadImage = function(name, callback=function(name){}) {
     var img = new Image()
     console.log('loading')
     loading += 1
@@ -199,6 +233,7 @@
         console.log('loaded ' + name)
         images[name] = img
         loading -= 1
+        callback(name);
     }
 
     img.src = 'img/' + name + '.png'
@@ -209,7 +244,17 @@
  loadImage("house2");
  loadImage("house3");
 
- loadImage("meskam");
+ loadImage("stay", function(name) {
+     animations["stay"] = animatedImage("stay", 1, 2, 300, 300, 20, 2);
+ });
+
+ loadImage("go", function(name) {
+     animations["go"] = animatedImage("go", 4, 4, 300, 300, 1, 16);
+ });
+
+  loadImage("jump", function(name) {
+     animations["jump"] = animatedImage("jump", 4, 4, 300, 300, 3, 14);
+ });
 
  loadImage("bridge/lines");
  loadImage("bridge/main");
