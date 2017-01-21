@@ -149,8 +149,8 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
      }
 
      if(jumping <= 3.14) {
-        player.y = 373 - Math.sin(jumping) * 20;
-        jumping += delta * 2;
+        player.y = 373 - Math.sin(jumping) * 30;
+        jumping += delta * 6;
      } else if(jumping > (3.14 - 0.1) && jumping < 100) {
          jumping = 100;
          var y = (Math.min(0.2, Math.sin(elapsed * 2)) + 0.2) * 2;
