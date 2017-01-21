@@ -32,6 +32,7 @@
  fps_limit = 60;
 
  audios = [];
+ music = [];
 
  framesThisSecond = 0;
  fpsElapsed = 0;
@@ -42,6 +43,7 @@
  moving = false;
  lastJumpTime = 0;
  jumpPeriod = 0;
+
 
  window.addEventListener("keydown", function(e) {
          keysDown[e.keyCode] = true;
@@ -339,6 +341,20 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
     img.src = 'img/' + name + '.png'
  }
 
+ playRandomMusic = function() {
+    music[Math.floor(Math.random() * (music.length))].play();
+ }
+
+ loadMusic = function(name) {
+    var m = new Audio("sounds/"+name+".ogg");
+    m.addEventListener("ended", function() {
+        this.currentTime = 0;
+        playRandomMusic();
+    });
+
+    music.push(m);
+ }
+
  loadImage("bridge");
  loadImage("house1");
  loadImage("house2");
@@ -363,6 +379,8 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
  loadImage("bridge/base");
 
  audios["jeb"] = new Audio('sounds/jeb.ogg');
+
+ loadMusic("melody1");
 
 
  cc = document.createElement("canvas")
@@ -392,6 +410,7 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
          // btx.fillStyle = "#FFFFFF";
          // btx.fillRect(0, 0, cc.width, cc.height);
          // btx.drawImage(images["bridge"], 0, 100);
+         playRandomMusic();
          window.requestAnimationFrame(tick);
      }
  };
