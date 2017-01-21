@@ -151,9 +151,11 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
      if(jumping <= 3.14 * 2) {
         player.y -= Math.sin(jumping) * 10;
         jumping += delta * 4;
-     } else if(jumping > 3.14 * 2 && jumping < 100) {
+     } else if(jumping > (3.14 * 2 - 0.1) && jumping < 100) {
          jumping = 100;
-         amplitude += 0.3;
+         var y = (Math.min(0.2, Math.sin(elapsed * 2)) + 0.2) * 2;
+         amplitude += 1;
+         player.y = 373
          console.log("JEB")
          audios["jeb"].play();
      }
@@ -189,7 +191,7 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
      ctx.drawImage(images["bridge/base"], 0, 250);
 
 
-     if(amplitude < 4) {
+     if(amplitude < 8) {
          btx.fillStyle = "#FFFFFF";
          btx.fillRect(0, 0, cc.width, cc.height);
          btx.drawImage(images["bridge/cokol"], 0, 100);
@@ -198,10 +200,16 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
      }
 
      for(var x = 0; x < 400; x += 1) {
-        var y = Math.min(0.2, Math.sin(x / 10)) * 20;
+        var y = (Math.min(0.2, Math.sin(x / 10 + elapsed)) + 0.2) * 20;
         ctx.fillStyle = "#888888";
         ctx.fillRect(x, y + 100, 1, 1);
+
+        ctx.fillRect(x, 100, 1, 1);
      }
+
+     var y = (Math.min(0.2, Math.sin(elapsed * 2)) + 0.2) * 20;
+     ctx.fillRect(100, y + 140, 10, 10);
+     ctx.fillRect(100, 150 + 10, 14, 2);
 
      var imageData = btx.getImageData(0, 0, cc.width, cc.height);
      var data = imageData.data;
@@ -221,7 +229,7 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
          var y = Math.floor((i / 4) / cc.width);
 
          if(data[i] !== 255) {
-             if(amplitude < 4) {
+             if(amplitude < 8) {
                  // WONSZ
                  y += Math.floor(Math.sin(x / 20 + elapsed * 5) * amplitude);
              } else {
