@@ -304,9 +304,9 @@ makePopup = function(image) {
                 dir = jumpPeriod - 2;
 
                 if(dir > 0) {
-                    makePopup("rabbit")
+                    makePopup("snail")
                 } else if(dir < 0) {
-                    makePopup("snail");
+                    makePopup("rabbit");
                 }
 
                 amplitude -= 1;
