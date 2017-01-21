@@ -31,6 +31,8 @@
  frame_counter = 0;
  fps_limit = 60;
 
+ audios = [];
+
  jumping = 100;
  amplitude = 0;
  moving = false;
@@ -153,6 +155,7 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
          jumping = 100;
          amplitude += 0.3;
          console.log("JEB")
+         audios["jeb"].play();
      }
 
      console.log(amplitude)
@@ -300,6 +303,9 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
  loadImage("bridge/cokol");
  loadImage("bridge/background");
  loadImage("bridge/base");
+
+ audios["jeb"] = new Audio('sounds/jeb.ogg');
+
 
  cc = document.createElement("canvas")
  cc.width = 800
