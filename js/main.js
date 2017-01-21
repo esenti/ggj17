@@ -90,12 +90,15 @@
  }
 
 
-
- level = [
-    {
-        "image": 'fafa'
-    },
- ]
+level = [
+    new ParallaxThing("house1", 520, 400, -0.05),
+    new ParallaxThing("house2", 70, 260, -0.05),
+    new ParallaxThing("house3", 300, 80, -0.025),
+    "player",
+    new StaticThing("bridge/background", 0, 250),
+    new StaticThing("bridge/base", 0, 250),
+    new Jebbable(800, 500, ["bridge/cokol", "bridge/main", "bridge/lines"]),
+]
 
 
 
@@ -142,6 +145,27 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
             number = 0;
         }
     }
+}
+
+function StaticThing(image, x, y) {
+    this.image = image;
+    this.x = x;
+    this.y = y;
+}
+
+StaticThing.prototype.draw = function(ctx) {
+     ctx.drawImage(images[this.image], this.x, this.y);
+}
+
+function ParallaxThing(image, x, y, shift) {
+    this.image = image;
+    this.x = x;
+    this.y = y;
+    this.shift = shift;
+}
+
+ParallaxThing.prototype.draw = function(ctx) {
+     ctx.drawImage(images[this.image], this.x + player.x * this.shift, this.y);
 }
 
 function Jebbable(width, height, layers) {
@@ -218,8 +242,6 @@ Jebbable.prototype.draw = function(ctx) {
 
      ctx.drawImage(this.cc, 0, 150)
 }
-
-bridge = new Jebbable(800, 500, ["bridge/cokol", "bridge/main", "bridge/lines"]);
 
 makePopup = function(text) {
     popups.push({
@@ -338,22 +360,6 @@ makePopup = function(text) {
         ctx.fillText(Math.round(fps), 10, 20);
      }
 
-     ctx.fillStyle = "#888888";
-     ctx.drawImage(images["house1"], 520 - player.x / 20, 400)
-     ctx.drawImage(images["house2"], 70 - player.x / 20, 260)
-     ctx.drawImage(images["house3"], 300 - player.x / 40, 80)
-
-     //ctx.drawImage(images["meskam"], player.x, player.y);
-     if(jumping < 3.14) {
-        animations["jump"].draw(ctx, player.x, player.y, 60, 60);
-     } else if(moving) {
-        animations["go"].draw(ctx, player.x, player.y, 60, 60);
-     } else {
-        animations["stay"].draw(ctx, player.x, player.y, 60, 60);
-     }
-     ctx.drawImage(images["bridge/background"], 0, 250);
-     ctx.drawImage(images["bridge/base"], 0, 250);
-
 
      for(var x = 0; x < 400; x += 1) {
         var y = (Math.min(0.2, Math.sin(x / 10 + elapsed)) + 0.2) * 20;
@@ -367,8 +373,19 @@ makePopup = function(text) {
      ctx.fillRect(100, y + 140, 10, 10);
      ctx.fillRect(100, 150 + 10, 14, 2);
 
-     bridge.draw(ctx);
-
+     for(var i = 0; i < level.length; i++) {
+         if(level[i] == "player") {
+             if(jumping < 3.14) {
+                animations["jump"].draw(ctx, player.x, player.y, 60, 60);
+             } else if(moving) {
+                animations["go"].draw(ctx, player.x, player.y, 60, 60);
+             } else {
+                animations["stay"].draw(ctx, player.x, player.y, 60, 60);
+             }
+         } else {
+             level[i].draw(ctx);
+         }
+     }
 
      for(var i = 0; i < popups.length; i++) {
         var popup = popups[i];
