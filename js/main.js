@@ -89,6 +89,16 @@
    y: 373,
  }
 
+
+
+ level = [
+    {
+        "image": 'fafa'
+    },
+ ]
+
+
+
  tick = function() {
      setDelta();
      elapsed += delta;
@@ -133,6 +143,83 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
         }
     }
 }
+
+function Jebbable(width, height, layers) {
+    this.cc = document.createElement("canvas");
+    this.cc.width = width;
+    this.cc.height = height;
+    this.layers = layers;
+    this.btx = this.cc.getContext("2d");
+}
+
+Jebbable.prototype.draw = function(ctx) {
+
+     if(amplitude < 8) {
+         this.btx.fillStyle = "#FFFFFF";
+         this.btx.fillRect(0, 0, this.cc.width, this.cc.height);
+         for(var i = 0; i < this.layers.length; i++) {
+             this.btx.drawImage(images[this.layers[i]], 0, 100);
+         }
+     }
+
+     var imageData = this.btx.getImageData(0, 0, this.cc.width, this.cc.height);
+     var data = imageData.data;
+
+     var newImageData = this.btx.createImageData(this.cc.width, this.cc.height)
+     var newData = newImageData.data;
+
+     for(var i = 0; i < newData.length; i += 4) {
+         newData[i] = 255;
+         newData[i + 1] = 255;
+         newData[i + 2] = 255;
+         newData[i + 3] = 0;
+     }
+
+     if(amplitude < 8) {
+         for(var i = 0; i < data.length; i += 4) {
+             var x = (i / 4) % this.cc.width;
+             var y = Math.floor((i / 4) / this.cc.width);
+
+             if(data[i] !== 255) {
+                 // WONSZ
+                 y += Math.floor(Math.sin(x / 20 + elapsed * 5) * amplitude);
+
+                 newData[4 * (y * this.cc.width + x) + 0] = data[i + 0]
+                 newData[4 * (y * this.cc.width + x) + 1] = data[i + 1]
+                 newData[4 * (y * this.cc.width + x) + 2] = data[i + 2]
+                 newData[4 * (y * this.cc.width + x) + 3] = data[i + 3]
+             }
+         }
+     } else {
+         for(var x = 0; x < this.cc.width; x += 1) {
+             for(var y = 0; y < this.cc.height; y += 1) {
+                 var i = 4 * (y * this.cc.width + x);
+                 var nx = x;
+                 var ny = y;
+
+                 if(data[i] !== 255) {
+                     // JEB
+                     ny += yRandom()
+                     nx += xRandom()
+
+                     var j = 4 * (ny * this.cc.width + nx);
+                     if(j + 3 < data.length) {
+                         newData[j] = data[i]
+                         newData[j + 1] = data[i + 1]
+                         newData[j + 2] = data[i + 2]
+                         newData[j + 3] = data[i + 3]
+                     }
+                 }
+             }
+         }
+     }
+
+     this.btx.putImageData(newImageData, 0, 0)
+
+     ctx.drawImage(this.cc, 0, 150)
+}
+
+bridge = new Jebbable(800, 500, ["bridge/cokol", "bridge/main", "bridge/lines"]);
 
 makePopup = function(text) {
     popups.push({
@@ -268,14 +355,6 @@ makePopup = function(text) {
      ctx.drawImage(images["bridge/base"], 0, 250);
 
 
-     if(amplitude < 8) {
-         btx.fillStyle = "#FFFFFF";
-         btx.fillRect(0, 0, cc.width, cc.height);
-         btx.drawImage(images["bridge/cokol"], 0, 100);
-         btx.drawImage(images["bridge/main"], 0, 100);
-         btx.drawImage(images["bridge/lines"], 0, 100);
-     }
-
      for(var x = 0; x < 400; x += 1) {
         var y = (Math.min(0.2, Math.sin(x / 10 + elapsed)) + 0.2) * 20;
         ctx.fillStyle = "#888888";
@@ -288,61 +367,8 @@ makePopup = function(text) {
      ctx.fillRect(100, y + 140, 10, 10);
      ctx.fillRect(100, 150 + 10, 14, 2);
 
-     var imageData = btx.getImageData(0, 0, cc.width, cc.height);
-     var data = imageData.data;
+     bridge.draw(ctx);
 
-     var newImageData = btx.createImageData(cc.width, cc.height)
-     var newData = newImageData.data;
-
-     for(var i = 0; i < newData.length; i += 4) {
-         newData[i] = 255;
-         newData[i + 1] = 255;
-         newData[i + 2] = 255;
-         newData[i + 3] = 0;
-     }
-
-     if(amplitude < 8) {
-         for(var i = 0; i < data.length; i += 4) {
-             var x = (i / 4) % cc.width;
-             var y = Math.floor((i / 4) / cc.width);
-
-             if(data[i] !== 255) {
-                 // WONSZ
-                 y += Math.floor(Math.sin(x / 20 + elapsed * 5) * amplitude);
-
-                 newData[4 * (y * cc.width + x) + 0] = data[i + 0]
-                 newData[4 * (y * cc.width + x) + 1] = data[i + 1]
-                 newData[4 * (y * cc.width + x) + 2] = data[i + 2]
-                 newData[4 * (y * cc.width + x) + 3] = data[i + 3]
-             }
-         }
-     } else {
-         for(var x = 0; x < cc.width; x += 1) {
-             for(var y = 0; y < cc.height; y += 1) {
-                 var i = 4 * (y * cc.width + x);
-                 var nx = x;
-                 var ny = y;
-
-                 if(data[i] !== 255) {
-                     // JEB
-                     ny += yRandom()
-                     nx += xRandom()
-
-                     var j = 4 * (ny * cc.width + nx);
-                     if(j + 3 < data.length) {
-                         newData[j] = data[i]
-                         newData[j + 1] = data[i + 1]
-                         newData[j + 2] = data[i + 2]
-                         newData[j + 3] = data[i + 3]
-                     }
-                 }
-             }
-         }
-     }
-
-     btx.putImageData(newImageData, 0, 0)
-
-     ctx.drawImage(cc, 0, 150)
 
      for(var i = 0; i < popups.length; i++) {
         var popup = popups[i];
@@ -433,10 +459,6 @@ makePopup = function(text) {
  loadMusic("melody1");
 
 
- cc = document.createElement("canvas")
- cc.width = 800
- cc.height = 500
- btx = cc.getContext("2d");
 
  makeRandom = function(min, max) {
      for (var i=1e6, lookupTable=[]; i--;) {
@@ -457,9 +479,6 @@ makePopup = function(text) {
      if(loading) {
          window.requestAnimationFrame(load);
      } else {
-         // btx.fillStyle = "#FFFFFF";
-         // btx.fillRect(0, 0, cc.width, cc.height);
-         // btx.drawImage(images["bridge"], 0, 100);
          playRandomMusic();
          window.requestAnimationFrame(tick);
      }
