@@ -33,6 +33,7 @@
 
  jumping = 100;
  amplitude = 0;
+ moving = false;
 
  window.addEventListener("keydown", function(e) {
          keysDown[e.keyCode] = true;
@@ -72,8 +73,8 @@
  };
 
  player = {
-   x: 100,
-   y: 200,
+   x: 50,
+   y: 373,
  }
 
  tick = function() {
@@ -124,19 +125,30 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
  update = function(delta) {
      if(keysDown[65]) {
          player.x -= delta * 100;
-     }
+         if(!moving) {
+            animations["go"].reset()
+         }
 
-     if(keysDown[68]) {
+         moving = true
+     } else if(keysDown[68]) {
          player.x += delta * 100;
+         if(!moving) {
+            animations["go"].reset()
+         }
+
+         moving = true
+     } else {
+         moving = false;
      }
 
      if(keysPressed[32] && jumping > 3.14 * 2) {
         jumping = 0;
+        animations["jump"].reset()
      }
 
      if(jumping <= 3.14 * 2) {
-        player.y -= Math.sin(jumping) * 3;
-        jumping += delta * 6;
+        player.y -= Math.sin(jumping) * 10;
+        jumping += delta * 4;
      } else if(jumping > 3.14 * 2 && jumping < 100) {
          jumping = 100;
          amplitude += 0.3;
@@ -163,7 +175,13 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
      ctx.drawImage(images["house3"], 300 - player.x / 40, 80)
 
      //ctx.drawImage(images["meskam"], player.x, player.y);
-     animations["jump"].draw(ctx, player.x, player.y, 60, 60);
+     if(jumping < 3.14 * 2) {
+        animations["jump"].draw(ctx, player.x, player.y, 60, 60);
+     } else if(moving) {
+        animations["go"].draw(ctx, player.x, player.y, 60, 60);
+     } else {
+        animations["stay"].draw(ctx, player.x, player.y, 60, 60);
+     }
      ctx.drawImage(images["bridge/background"], 0, 250);
      ctx.drawImage(images["bridge/base"], 0, 250);
 
@@ -176,11 +194,11 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
          btx.drawImage(images["bridge/lines"], 0, 100);
      }
 
-     // for(var x = 0; x < 400; x += 1) {
-     //    var y = x;
-     //    ctx.fillStyle = "#888888";
-     //    ctx.fillRect(x, y, 1, 1);
-     // }
+     for(var x = 0; x < 400; x += 1) {
+        var y = Math.min(0.2, Math.sin(x / 10)) * 20;
+        ctx.fillStyle = "#888888";
+        ctx.fillRect(x, y + 100, 1, 1);
+     }
 
      var imageData = btx.getImageData(0, 0, cc.width, cc.height);
      var data = imageData.data;
@@ -274,7 +292,7 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
  });
 
   loadImage("jump", function(name) {
-     animations["jump"] = animatedImage("jump", 4, 4, 300, 300, 3, 14);
+     animations["jump"] = animatedImage("jump", 4, 4, 300, 300, 1, 14);
  });
 
  loadImage("bridge/lines");
