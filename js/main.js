@@ -143,15 +143,15 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
          moving = false;
      }
 
-     if(keysPressed[32] && jumping > 3.14 * 2) {
+     if(keysPressed[32] && jumping > 3.14) {
         jumping = 0;
         animations["jump"].reset()
      }
 
-     if(jumping <= 3.14 * 2) {
-        player.y -= Math.sin(jumping) * 10;
-        jumping += delta * 4;
-     } else if(jumping > (3.14 * 2 - 0.1) && jumping < 100) {
+     if(jumping <= 3.14) {
+        player.y = 373 - Math.sin(jumping) * 20;
+        jumping += delta * 2;
+     } else if(jumping > (3.14 - 0.1) && jumping < 100) {
          jumping = 100;
          var y = (Math.min(0.2, Math.sin(elapsed * 2)) + 0.2) * 2;
          amplitude += 1;
@@ -180,7 +180,7 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
      ctx.drawImage(images["house3"], 300 - player.x / 40, 80)
 
      //ctx.drawImage(images["meskam"], player.x, player.y);
-     if(jumping < 3.14 * 2) {
+     if(jumping < 3.14) {
         animations["jump"].draw(ctx, player.x, player.y, 60, 60);
      } else if(moving) {
         animations["go"].draw(ctx, player.x, player.y, 60, 60);
