@@ -154,7 +154,7 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
      } else if(jumping > (3.14 - 0.1) && jumping < 100) {
          jumping = 100;
          var y = (Math.min(0.2, Math.sin(elapsed * 2)) + 0.2) * 2;
-         amplitude += 1;
+         amplitude += 5;
          player.y = 373
          console.log("JEB")
          audios["jeb"].play();
@@ -224,24 +224,42 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
          newData[i + 3] = 0;
      }
 
-     for(var i = 0; i < data.length; i += 4) {
-         var x = (i / 4) % cc.width;
-         var y = Math.floor((i / 4) / cc.width);
+     if(amplitude < 8) {
+         for(var i = 0; i < data.length; i += 4) {
+             var x = (i / 4) % cc.width;
+             var y = Math.floor((i / 4) / cc.width);
 
-         if(data[i] !== 255) {
-             if(amplitude < 8) {
+             if(data[i] !== 255) {
                  // WONSZ
                  y += Math.floor(Math.sin(x / 20 + elapsed * 5) * amplitude);
-             } else {
-                 // JEB
-                 y += yRandom()
-                 x += xRandom()
-             }
 
-             newData[4 * (y * cc.width + x) + 0] = data[i + 0]
-             newData[4 * (y * cc.width + x) + 1] = data[i + 1]
-             newData[4 * (y * cc.width + x) + 2] = data[i + 2]
-             newData[4 * (y * cc.width + x) + 3] = data[i + 3]
+                 newData[4 * (y * cc.width + x) + 0] = data[i + 0]
+                 newData[4 * (y * cc.width + x) + 1] = data[i + 1]
+                 newData[4 * (y * cc.width + x) + 2] = data[i + 2]
+                 newData[4 * (y * cc.width + x) + 3] = data[i + 3]
+             }
+         }
+     } else {
+         for(var x = 0; x < cc.width; x += 1) {
+             for(var y = 0; y < cc.height; y += 1) {
+                 var i = 4 * (y * cc.width + x);
+                 var nx = x;
+                 var ny = y
+
+                 if(data[i] !== 255) {
+                     // JEB
+                     ny += yRandom()
+                     nx += xRandom()
+
+                     var j = 4 * (ny * cc.width + nx);
+                     if(j + 3 < data.length) {
+                         newData[j] = data[i]
+                         newData[j + 1] = data[i + 1]
+                         newData[j + 2] = data[i + 2]
+                         newData[j + 3] = data[i + 3]
+                     }
+                 }
+             }
          }
      }
 
