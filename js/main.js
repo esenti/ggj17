@@ -113,14 +113,20 @@
      ctx.fillRect(0, 0, c.width, c.height);
 
      ctx.fillStyle = "#888888";
-     ctx.fillRect(150 - player.x / 10, 50, 100, 300);
+     ctx.drawImage(images["house1"], 520 - player.x / 20, 400)
+     ctx.drawImage(images["house2"], 70 - player.x / 20, 260)
+     ctx.drawImage(images["house3"], 300 - player.x / 40, 80)
 
-     ctx.fillRect(player.x, player.y, 20, 50);
+     ctx.drawImage(images["meskam"], player.x, player.y);
+     ctx.drawImage(images["bridge/background"], 0, 200);
+     ctx.drawImage(images["bridge/base"], 0, 200);
 
      if(amplitude < 4) {
          btx.fillStyle = "#FFFFFF";
          btx.fillRect(0, 0, cc.width, cc.height);
-         btx.drawImage(images["bridge"], 0, 100);
+         btx.drawImage(images["bridge/cokol"], 0, 100);
+         btx.drawImage(images["bridge/main"], 0, 100);
+         btx.drawImage(images["bridge/lines"], 0, 100);
      }
 
      var imageData = btx.getImageData(0, 0, cc.width, cc.height);
@@ -159,7 +165,7 @@
 
      btx.putImageData(newImageData, 0, 0)
 
-     ctx.drawImage(cc, 200, 100)
+     ctx.drawImage(cc, 0, 100)
  };
 
  (function() {
@@ -186,11 +192,11 @@
  })();
 
  loadImage = function(name) {
-    img = new Image()
+    var img = new Image()
     console.log('loading')
     loading += 1
     img.onload = function() {
-        console.log('loaded')
+        console.log('loaded ' + name)
         images[name] = img
         loading -= 1
     }
@@ -199,19 +205,30 @@
  }
 
  loadImage("bridge");
+ loadImage("house1");
+ loadImage("house2");
+ loadImage("house3");
+
+ loadImage("meskam");
+
+ loadImage("bridge/lines");
+ loadImage("bridge/main");
+ loadImage("bridge/cokol");
+ loadImage("bridge/background");
+ loadImage("bridge/base");
 
  cc = document.createElement("canvas")
- cc.width = 400
- cc.height = 400
+ cc.width = 800
+ cc.height = 500
  btx = cc.getContext("2d");
 
  load = function() {
      if(loading) {
          window.requestAnimationFrame(load);
      } else {
-         btx.fillStyle = "#FFFFFF";
-         btx.fillRect(0, 0, cc.width, cc.height);
-         btx.drawImage(images["bridge"], 0, 100);
+         // btx.fillStyle = "#FFFFFF";
+         // btx.fillRect(0, 0, cc.width, cc.height);
+         // btx.drawImage(images["bridge"], 0, 100);
          window.requestAnimationFrame(tick);
      }
  };
