@@ -243,11 +243,11 @@ Jebbable.prototype.draw = function(ctx) {
      ctx.drawImage(this.cc, 0, 150)
 }
 
-makePopup = function(text) {
+makePopup = function(image) {
     popups.push({
         x:     player.x,
-        y:     player.y,
-        text:  text,
+        y:     player.y - 30,
+        image:  image,
         ttl:   2,
         speed: 20,
     })
@@ -304,9 +304,9 @@ makePopup = function(text) {
                 dir = jumpPeriod - 2;
 
                 if(dir > 0) {
-                    makePopup("too fast")
+                    makePopup("rabbit")
                 } else if(dir < 0) {
-                    makePopup("too slow");
+                    makePopup("snail");
                 }
 
                 amplitude -= 1;
@@ -389,9 +389,7 @@ makePopup = function(text) {
 
      for(var i = 0; i < popups.length; i++) {
         var popup = popups[i];
-        ctx.fillStyle = "#000000";
-        ctx.font = "20px Sans";
-        ctx.fillText(popup.text, popup.x, popup.y);
+        ctx.drawImage(images[popup.image], popup.x, popup.y, 50, 50);
      }
  };
 
@@ -470,6 +468,11 @@ makePopup = function(text) {
  loadImage("bridge/cokol");
  loadImage("bridge/background");
  loadImage("bridge/base");
+
+ loadImage("trump/tower");
+
+ loadImage("snail");
+ loadImage("rabbit");
 
  audios["jeb"] = new Audio('sounds/jeb.ogg');
 
