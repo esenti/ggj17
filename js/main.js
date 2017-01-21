@@ -27,6 +27,8 @@
 
  images = [];
 
+ jumping = 100;
+
  window.addEventListener("keydown", function(e) {
          keysDown[e.keyCode] = true;
          return keysPressed[e.keyCode] = true;
@@ -88,6 +90,17 @@ x: 100,
      if(keysDown[68]) {
          player.x += delta * 100;
      }
+
+     if(keysPressed[32] && jumping > 3.14 * 2) {
+        jumping = 0;
+     }
+
+     if(jumping <= 3.14 * 2) {
+        // player.y -= Math.sin(jumping) * 3;
+        jumping += delta * 6;
+     }
+
+     console.log(jumping)
  };
 
  draw = function(delta) {
