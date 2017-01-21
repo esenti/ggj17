@@ -28,6 +28,7 @@
  images = [];
 
  jumping = 100;
+ amplitude = 0;
 
  window.addEventListener("keydown", function(e) {
          keysDown[e.keyCode] = true;
@@ -67,8 +68,8 @@
  };
 
  player = {
-x: 100,
-   y: 100,
+   x: 100,
+   y: 200,
  }
 
  tick = function() {
@@ -98,6 +99,10 @@ x: 100,
      if(jumping <= 3.14 * 2) {
         // player.y -= Math.sin(jumping) * 3;
         jumping += delta * 6;
+     } else if(jumping > 3.14 * 2 && jumping < 100) {
+         jumping = 100;
+         amplitude += 0.3;
+         console.log("JEB")
      }
 
      console.log(jumping)
@@ -110,10 +115,13 @@ x: 100,
      ctx.fillStyle = "#888888";
      ctx.fillRect(150 - player.x / 10, 50, 100, 300);
 
-     ctx.fillStyle = "#000000";
-     ctx.fillRect(50, 200, 40, 20);
-
      ctx.fillRect(player.x, player.y, 20, 50);
+
+     if(amplitude < 4) {
+         btx.fillStyle = "#FFFFFF";
+         btx.fillRect(0, 0, cc.width, cc.height);
+         btx.drawImage(images["bridge"], 0, 100);
+     }
 
      var imageData = btx.getImageData(0, 0, cc.width, cc.height);
      var data = imageData.data;
@@ -133,9 +141,9 @@ x: 100,
          var y = Math.floor((i / 4) / cc.width);
 
          if(data[i] !== 255) {
-             if(elapsed <= 10) {
+             if(amplitude < 4) {
                  // WONSZ
-                 y += Math.floor(Math.sin(x / 20 + elapsed * 5) * elapsed * 0.3);
+                 y += Math.floor(Math.sin(x / 20 + elapsed * 5) * amplitude);
              } else {
                  // JEB
                  y += Math.floor(Math.random() * 24);
