@@ -94,6 +94,9 @@ x: 100,
      ctx.fillStyle = "#FFFFFF";
      ctx.fillRect(0, 0, c.width, c.height);
 
+     ctx.fillStyle = "#888888";
+     ctx.fillRect(150 - player.x / 10, 50, 100, 300);
+
      ctx.fillStyle = "#000000";
      ctx.fillRect(50, 200, 40, 20);
 
