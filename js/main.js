@@ -89,8 +89,21 @@
    y: 373,
  }
 
+resetPlayer = function() {
+    player_animation_frame = 0;
+    frame_counter = 0;
 
-level = [
+    jumping = 100;
+    amplitude = 0;
+    moving = false;
+    lastJumpTime = 0;
+    jumpPeriod = 0;
+    dir = 0;
+}
+
+
+levels = [[
+    new Wave(0, 100, 400),
     new ParallaxThing("house1", 520, 400, -0.05),
     new ParallaxThing("house2", 70, 260, -0.05),
     new ParallaxThing("house3", 300, 80, -0.025),
@@ -98,9 +111,14 @@ level = [
     new StaticThing("bridge/background", 0, 250),
     new StaticThing("bridge/base", 0, 250),
     new Jebbable(800, 500, ["bridge/cokol", "bridge/main", "bridge/lines"]),
-]
+],
+[
+    new Jebbable(800, 500, ["trump/tower"]),
+    "player",
+]];
 
-
+currentLevel = 0;
+level = levels[currentLevel];
 
  tick = function() {
      setDelta();
@@ -145,6 +163,21 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
             number = 0;
         }
     }
+}
+
+function Wave(x, y, length) {
+    this.x = x;
+    this.y = y;
+    this.length = length;
+}
+
+Wave.prototype.draw = function(ctx) {
+     for(var x = this.x; x < this.length; x += 1) {
+        var y = Math.sin(x / 10 + elapsed) * 20;
+        ctx.fillStyle = "#aaaaaa";
+        ctx.fillRect(x, y + this.y, 1, 1);
+        ctx.fillRect(x, this.y, 1, 1);
+     }
 }
 
 function StaticThing(image, x, y) {
@@ -261,6 +294,12 @@ makePopup = function(image) {
         framesThisSecond = fpsElapsed = 0;
      }
 
+     if(keysPressed[82]) {
+        currentLevel++;
+        level = levels[currentLevel];
+        resetPlayer();
+     }
+
      if(keysDown[65]) {
          player.x -= delta * 100;
          if(!moving) {
@@ -320,8 +359,6 @@ makePopup = function(image) {
          audios["jeb"].play();
      }
 
-     // console.log(amplitude)
-
      if(amplitude > 0) {
         if(amplitude < 8) {
             amplitude -= delta * 0.05
@@ -360,14 +397,6 @@ makePopup = function(image) {
         ctx.fillText(Math.round(fps), 10, 20);
      }
 
-
-     for(var x = 0; x < 400; x += 1) {
-        var y = Math.sin(x / 10 + elapsed) * 20;
-        ctx.fillStyle = "#888888";
-        ctx.fillRect(x, y + 100, 1, 1);
-
-        ctx.fillRect(x, 100, 1, 1);
-     }
 
      for(var i = 0; i < level.length; i++) {
          if(level[i] == "player") {
