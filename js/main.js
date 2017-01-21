@@ -153,7 +153,8 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
      //ctx.drawImage(images["meskam"], player.x, player.y);
      animations["jump"](ctx, player.x, player.y, 60, 60);
      ctx.drawImage(images["bridge/background"], 0, 200);
-     ctx.drawImage(images["bridge/base"], 0, 200);
+     ctx.drawImage(images["bridge/base"], 0, 250);
+
 
      if(amplitude < 4) {
          btx.fillStyle = "#FFFFFF";
@@ -199,7 +200,7 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
 
      btx.putImageData(newImageData, 0, 0)
 
-     ctx.drawImage(cc, 0, 100)
+     ctx.drawImage(cc, 0, 150)
  };
 
  (function() {
