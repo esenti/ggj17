@@ -40,6 +40,8 @@
  jumping = 100;
  amplitude = 0;
  moving = false;
+ lastJumpTime = 0;
+ jumpPeriod = 0;
 
  window.addEventListener("keydown", function(e) {
          keysDown[e.keyCode] = true;
@@ -165,13 +167,25 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
      } else if(jumping > (3.14 - 0.1) && jumping < 100) {
          jumping = 100;
          var y = (Math.min(0.2, Math.sin(elapsed * 2)) + 0.2) * 2;
-         amplitude += 5;
+
+         if(lastJumpTime) {
+            jumpPeriod = elapsed - lastJumpTime;
+
+            error = (jumpPeriod - 2) * (jumpPeriod - 2)
+            console.log(error)
+            if(error < 0.3) {
+                amplitude += 1;
+            }
+         }
+
+         lastJumpTime = elapsed;
+
          player.y = 373
          console.log("JEB")
          audios["jeb"].play();
      }
 
-     console.log(amplitude)
+     // console.log(amplitude)
 
      if(amplitude > 0) {
         amplitude -= delta * 0.05
