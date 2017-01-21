@@ -118,8 +118,8 @@
      ctx.drawImage(images["house3"], 300 - player.x / 40, 80)
 
      ctx.drawImage(images["meskam"], player.x, player.y);
-     ctx.drawImage(images["bridge/background"], 0, 200);
-     ctx.drawImage(images["bridge/base"], 0, 200);
+     ctx.drawImage(images["bridge/background"], 0, 250);
+     ctx.drawImage(images["bridge/base"], 0, 250);
 
      if(amplitude < 4) {
          btx.fillStyle = "#FFFFFF";
@@ -165,7 +165,7 @@
 
      btx.putImageData(newImageData, 0, 0)
 
-     ctx.drawImage(cc, 0, 100)
+     ctx.drawImage(cc, 0, 150)
  };
 
  (function() {
