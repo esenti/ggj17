@@ -43,7 +43,9 @@
  moving = false;
  lastJumpTime = 0;
  jumpPeriod = 0;
+ dir = 0;
 
+ popups = [];
 
  window.addEventListener("keydown", function(e) {
          keysDown[e.keyCode] = true;
@@ -132,6 +134,16 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
     }
 }
 
+makePopup = function(text) {
+    popups.push({
+        x:     player.x,
+        y:     player.y,
+        text:  text,
+        ttl:   2,
+        speed: 20,
+    })
+}
+
  update = function(delta) {
      framesThisSecond += 1;
      fpsElapsed += delta;
@@ -174,9 +186,21 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
             jumpPeriod = elapsed - lastJumpTime;
 
             error = (jumpPeriod - 2) * (jumpPeriod - 2)
+
             console.log(error)
             if(error < 0.3) {
+                dir = 0;
                 amplitude += 1;
+            } else {
+                dir = jumpPeriod - 2;
+
+                if(dir > 0) {
+                    makePopup("too fast")
+                } else if(dir < 0) {
+                    makePopup("too slow");
+                }
+
+                amplitude -= 1;
             }
          }
 
@@ -190,9 +214,28 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
      // console.log(amplitude)
 
      if(amplitude > 0) {
-        amplitude -= delta * 0.05
+        if(amplitude < 8) {
+            amplitude -= delta * 0.05
+        }
      } else {
         amplitude = 0
+     }
+
+     for(var i = 0; i < popups.length; i++) {
+        var popup = popups[i];
+        popup.ttl -= delta;
+        popup.y -= popup.speed * delta;
+        if(popup.ttl <= 0) {
+            popup.delete = true;
+        }
+     }
+
+     for(var i = 0; i < popups.length; i++) {
+        var popup = popups[i];
+        if(popup.delete) {
+            popups.splice(i, 1);
+            break;
+        }
      }
  };
 
@@ -300,6 +343,13 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
      btx.putImageData(newImageData, 0, 0)
 
      ctx.drawImage(cc, 0, 150)
+
+     for(var i = 0; i < popups.length; i++) {
+        var popup = popups[i];
+        ctx.fillStyle = "#000000";
+        ctx.font = "20px Sans";
+        ctx.fillText(popup.text, popup.x, popup.y);
+     }
  };
 
  (function() {
