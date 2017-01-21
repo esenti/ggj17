@@ -362,16 +362,12 @@ makePopup = function(image) {
 
 
      for(var x = 0; x < 400; x += 1) {
-        var y = (Math.min(0.2, Math.sin(x / 10 + elapsed)) + 0.2) * 20;
+        var y = Math.sin(x / 10 + elapsed) * 20;
         ctx.fillStyle = "#888888";
         ctx.fillRect(x, y + 100, 1, 1);
 
         ctx.fillRect(x, 100, 1, 1);
      }
-
-     var y = (Math.min(0.2, Math.sin(elapsed * 2)) + 0.2) * 20;
-     ctx.fillRect(100, y + 140, 10, 10);
-     ctx.fillRect(100, 150 + 10, 14, 2);
 
      for(var i = 0; i < level.length; i++) {
          if(level[i] == "player") {
