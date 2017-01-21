@@ -98,13 +98,13 @@
 animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit) {
     var img = images[name];
     var number = 0;
-    return function(ctx, dx, dy, dw=false, dh=false) {
+    return function(ctx, dx, dy, dw, dh) {
         if (frame_counter % fps == 0)
             number ++;
         number = number % limit;
         var y = Math.floor(number / s_width);
         var x = number - (y * s_width);
-        if (dw != false && dh != false) {
+        if (dw && dh) {
             return ctx.drawImage(img, f_width * x, f_height * y,
                              f_width, f_height, dx, dy, dw, dh);
         } else {
@@ -129,7 +129,7 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
      }
 
      if(jumping <= 3.14 * 2) {
-        // player.y -= Math.sin(jumping) * 3;
+        player.y -= Math.sin(jumping) * 3;
         jumping += delta * 6;
      } else if(jumping > 3.14 * 2 && jumping < 100) {
          jumping = 100;
@@ -137,7 +137,13 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
          console.log("JEB")
      }
 
-     console.log(jumping)
+     console.log(amplitude)
+
+     if(amplitude > 0) {
+        amplitude -= delta * 0.05
+     } else {
+        amplitude = 0
+     }
  };
 
  draw = function(delta) {
@@ -152,7 +158,7 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
 
      //ctx.drawImage(images["meskam"], player.x, player.y);
      animations["jump"](ctx, player.x, player.y, 60, 60);
-     ctx.drawImage(images["bridge/background"], 0, 200);
+     ctx.drawImage(images["bridge/background"], 0, 250);
      ctx.drawImage(images["bridge/base"], 0, 250);
 
 
@@ -163,6 +169,12 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
          btx.drawImage(images["bridge/main"], 0, 100);
          btx.drawImage(images["bridge/lines"], 0, 100);
      }
+
+     // for(var x = 0; x < 400; x += 1) {
+     //    var y = x;
+     //    ctx.fillStyle = "#888888";
+     //    ctx.fillRect(x, y, 1, 1);
+     // }
 
      var imageData = btx.getImageData(0, 0, cc.width, cc.height);
      var data = imageData.data;
@@ -226,7 +238,7 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
   }
  })();
 
- loadImage = function(name, callback=function(name){}) {
+ loadImage = function(name, callback) {
     var img = new Image()
     console.log('loading')
     loading += 1
@@ -234,7 +246,9 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
         console.log('loaded ' + name)
         images[name] = img
         loading -= 1
-        callback(name);
+        if(callback) {
+            callback(name);
+        }
     }
 
     img.src = 'img/' + name + '.png'
