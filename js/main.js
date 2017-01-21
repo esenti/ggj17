@@ -98,20 +98,26 @@
 animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit) {
     var img = images[name];
     var number = 0;
-    return function(ctx, dx, dy, dw, dh) {
-        if (frame_counter % fps == 0)
-            number ++;
-        number = number % limit;
-        var y = Math.floor(number / s_width);
-        var x = number - (y * s_width);
-        if (dw && dh) {
-            return ctx.drawImage(img, f_width * x, f_height * y,
-                             f_width, f_height, dx, dy, dw, dh);
-        } else {
-            return ctx.drawImage(img, f_width * x, f_height * y,
-                             f_width, f_height, dx, dy, f_width, f_height);
-        }
+    return {
+        draw: function(ctx, dx, dy, dw, dh) {
+            if (frame_counter % fps == 0)
+                number ++;
+            number = number % limit;
+            var y = Math.floor(number / s_width);
+            var x = number - (y * s_width);
+            if (dw && dh) {
+                return ctx.drawImage(img, f_width * x, f_height * y,
+                   f_width, f_height, dx, dy, dw, dh);
+            } else {
+                return ctx.drawImage(img, f_width * x, f_height * y,
+                   f_width, f_height, dx, dy, f_width, f_height);
+            }
 
+        },
+
+        reset: function() {
+            number = 0;
+        }
     }
 }
 
@@ -157,7 +163,7 @@ animatedImage = function(name, s_width, s_height, f_width, f_height, fps, limit)
      ctx.drawImage(images["house3"], 300 - player.x / 40, 80)
 
      //ctx.drawImage(images["meskam"], player.x, player.y);
-     animations["jump"](ctx, player.x, player.y, 60, 60);
+     animations["jump"].draw(ctx, player.x, player.y, 60, 60);
      ctx.drawImage(images["bridge/background"], 0, 250);
      ctx.drawImage(images["bridge/base"], 0, 250);
 
