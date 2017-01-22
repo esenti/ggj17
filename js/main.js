@@ -307,14 +307,14 @@ makePopup = function(image) {
         resetPlayer();
      }
 
-     if(keysDown[65]) {
+     if(keysDown[65] && player.x > -10) {
          player.x -= delta * 100;
          if(!moving) {
             animations["go"].reset()
          }
 
          moving = true
-     } else if(keysDown[68]) {
+     } else if(keysDown[68] && (player.x < 760 || amplitude > 8)) {
          player.x += delta * 100;
          if(!moving) {
             animations["go"].reset()
