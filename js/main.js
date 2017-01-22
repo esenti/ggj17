@@ -118,8 +118,12 @@ levels = [[
     new Jebbable(0, 250, 800, 500, ["bridge/cokol", "bridge/main", "bridge/lines"]),
 ],
 [
-    new Jebbable(250, 50, 540, 600, ["trump/tower"]),
+    new ParallaxThing("trump/trump", 0, 0, -0.3),
+    new ParallaxThing("trump/chopper", 0, 0, -0.3),
+    new Jebbable(0, 0, 800, 600, ["trump/tower"]),
     "player",
+    new StaticThing("trump/people", 0, 0),
+    new StaticThing("trump/background", 0, 0),
 ]];
 
 currentLevel = 0;
@@ -508,6 +512,10 @@ makePopup = function(image) {
  loadImage("bridge/base");
 
  loadImage("trump/tower");
+ loadImage("trump/background");
+ loadImage("trump/people");
+ loadImage("trump/chopper");
+ loadImage("trump/trump");
 
  loadImage("snail");
  loadImage("rabbit");
