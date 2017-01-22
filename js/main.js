@@ -99,14 +99,17 @@ resetPlayer = function() {
     lastJumpTime = 0;
     jumpPeriod = 0;
     dir = 0;
+
+    player.x = 50;
+    player.y = 373;
 }
 
 
 levels = [[
     new Wave(0, 100, 400),
-    new ParallaxThing("house1", 520, 400, -0.05),
-    new ParallaxThing("house2", 70, 260, -0.05),
     new ParallaxThing("house3", 300, 80, -0.025),
+    new ParallaxThing("house1", 520, 400, -0.1),
+    new ParallaxThing("house2", 70, 260, -0.1),
     "player",
     new StaticThing("bridge/background", 0, 250),
     new StaticThing("bridge/base", 0, 250),
@@ -316,6 +319,12 @@ makePopup = function(image) {
          moving = true
      } else {
          moving = false;
+     }
+
+     if(player.x > 800) {
+        currentLevel++;
+        level = levels[currentLevel];
+        resetPlayer();
      }
 
      if(keysPressed[32] && jumping > 3.14) {
