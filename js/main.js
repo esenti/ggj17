@@ -110,8 +110,8 @@ playerYs = [373, 520];
 levels = [[
     new Wave(0, 100, 400),
     new ParallaxThing("house3", 300, 80, -0.025),
-    new ParallaxThing("house1", 520, 400, -0.1),
-    new ParallaxThing("house2", 70, 260, -0.1),
+    new ParallaxThing("house2", 540, 200, -0.1),
+    new ParallaxThing("house1", 20, 360, -0.1),
     "player",
     new StaticThing("bridge/background", 0, 250),
     new StaticThing("bridge/base", 0, 250),
