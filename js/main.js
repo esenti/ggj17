@@ -375,7 +375,7 @@ makePopup = function(image) {
             console.log(error)
             if(error < 0.3) {
                 dir = 0;
-                amplitude += (currentLevel == 3) ? 5 : 1.5;
+                amplitude += (currentLevel == 3) ? 5 : 3;
             } else {
                 dir = jumpPeriod - targetPeriod;
 
