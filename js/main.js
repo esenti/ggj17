@@ -101,8 +101,10 @@ resetPlayer = function() {
     dir = 0;
 
     player.x = 50;
-    player.y = 373;
+    player.y = playerYs[currentLevel];
 }
+
+playerYs = [373, 520];
 
 
 levels = [[
@@ -113,10 +115,10 @@ levels = [[
     "player",
     new StaticThing("bridge/background", 0, 250),
     new StaticThing("bridge/base", 0, 250),
-    new Jebbable(800, 500, ["bridge/cokol", "bridge/main", "bridge/lines"]),
+    new Jebbable(0, 250, 800, 500, ["bridge/cokol", "bridge/main", "bridge/lines"]),
 ],
 [
-    new Jebbable(800, 500, ["trump/tower"]),
+    new Jebbable(250, 50, 540, 600, ["trump/tower"]),
     "player",
 ]];
 
@@ -204,8 +206,10 @@ ParallaxThing.prototype.draw = function(ctx) {
      ctx.drawImage(images[this.image], this.x + player.x * this.shift, this.y);
 }
 
-function Jebbable(width, height, layers) {
+function Jebbable(x, y, width, height, layers) {
     this.cc = document.createElement("canvas");
+    this.x = x
+    this.y = y
     this.cc.width = width;
     this.cc.height = height;
     this.layers = layers;
@@ -218,7 +222,7 @@ Jebbable.prototype.draw = function(ctx) {
          this.btx.fillStyle = "#FFFFFF";
          this.btx.fillRect(0, 0, this.cc.width, this.cc.height);
          for(var i = 0; i < this.layers.length; i++) {
-             this.btx.drawImage(images[this.layers[i]], 0, 100);
+             this.btx.drawImage(images[this.layers[i]], 0, 0);
          }
      }
 
@@ -276,7 +280,7 @@ Jebbable.prototype.draw = function(ctx) {
 
      this.btx.putImageData(newImageData, 0, 0)
 
-     ctx.drawImage(this.cc, 0, 150)
+     ctx.drawImage(this.cc, this.x, this.y)
 }
 
 makePopup = function(image) {
@@ -333,7 +337,7 @@ makePopup = function(image) {
      }
 
      if(jumping <= 3.14) {
-        player.y = 373 - Math.sin(jumping) * 30;
+        player.y = playerYs[currentLevel] - Math.sin(jumping) * 30;
         jumping += delta * 6;
      } else if(jumping > (3.14 - 0.1) && jumping < 100) {
          jumping = 100;
@@ -363,7 +367,7 @@ makePopup = function(image) {
 
          lastJumpTime = elapsed;
 
-         player.y = 373
+         player.y = playerYs[currentLevel]
          console.log("JEB")
          audios["jeb"].play();
      }
