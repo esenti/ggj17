@@ -118,11 +118,11 @@ levels = [[
     new Jebbable(0, 250, 800, 500, ["bridge/cokol", "bridge/main", "bridge/lines"]),
 ],
 [
-    new ParallaxThing("trump/trump", 0, 0, -0.3),
-    new ParallaxThing("trump/chopper", 0, 0, -0.3),
-    new Jebbable(0, 0, 800, 600, ["trump/tower"]),
-    "player",
+    new ParallaxThing("trump/trump", 70, 0, -0.3),
+    new ParallaxThing("trump/chopper", 70, 0, -0.3),
+    new Jebbable(0, 10, 800, 600, ["trump/tower"]),
     new StaticThing("trump/people", 0, 0),
+    "player",
     new StaticThing("trump/background", 0, 0),
 ]];
 
@@ -265,7 +265,7 @@ Jebbable.prototype.draw = function(ctx) {
                  var nx = x;
                  var ny = y;
 
-                 if(data[i] !== 255) {
+                 if(data[i] != 255) {
                      // JEB
                      ny += yRandom()
                      nx += xRandom()
