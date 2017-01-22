@@ -85,7 +85,7 @@
  };
 
  player = {
-   x: 50,
+   x: 0,
    y: 373,
  }
 
@@ -100,7 +100,7 @@ resetPlayer = function() {
     jumpPeriod = 0;
     dir = 0;
 
-    player.x = 50;
+    player.x = 0;
     player.y = playerYs[currentLevel];
 }
 
@@ -375,7 +375,7 @@ makePopup = function(image) {
             console.log(error)
             if(error < 0.3) {
                 dir = 0;
-                amplitude += 5;
+                amplitude += (currentLevel == 3) ? 5 : 1.5;
             } else {
                 dir = jumpPeriod - targetPeriod;
 
