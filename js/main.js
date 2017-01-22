@@ -220,7 +220,7 @@ ParallaxThing.prototype.draw = function(ctx) {
      ctx.drawImage(images[this.image], this.x + player.x * this.shift, this.y);
 }
 
-function Jebbable(x, y, width, height, layers) {
+function Jebbable(x, y, width, height, layers, ctx) {
     this.cc = document.createElement("canvas");
     this.x = x
     this.y = y
@@ -228,6 +228,14 @@ function Jebbable(x, y, width, height, layers) {
     this.cc.height = height;
     this.layers = layers;
     this.btx = this.cc.getContext("2d");
+
+    if(ctx) {
+         this.btx.fillStyle = "#FFFFFF";
+         this.btx.fillRect(0, 0, this.cc.width, this.cc.height);
+         for(var i = 0; i < this.layers.length; i++) {
+             this.btx.drawImage(images[this.layers[i]], 0, 0);
+         }
+    }
 }
 
 Jebbable.prototype.draw = function(ctx) {
@@ -304,6 +312,10 @@ makePopup = function(image) {
 }
 
  update = function(delta) {
+     if(currentLevel == -1) {
+         return
+     }
+
      framesThisSecond += 1;
      fpsElapsed += delta;
      if(fpsElapsed >= 1) {
@@ -387,6 +399,10 @@ makePopup = function(image) {
             amplitude -= delta * 0.05
         } else {
             audios["ultimate_jeb"].play();
+            if(currentLevel == 3) {
+                level = [new Jebbable(player.x, player.y, 400, 400, ["meskam"], ctx)];
+                currentLevel = -1;
+            }
         }
      } else {
         amplitude = 0
@@ -533,6 +549,8 @@ makePopup = function(image) {
 
  loadImage("snail");
  loadImage("rabbit");
+
+ loadImage("meskam");
 
  audios["jeb"] = new Audio('sounds/jeb.ogg');
  audios["ultimate_jeb"] = new Audio("sounds/ultimate_jeb.ogg");
