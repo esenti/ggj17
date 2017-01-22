@@ -386,7 +386,7 @@ makePopup = function(image) {
                 }
 
                 if(amplitude < 8) {
-                    amplitude -= 1;
+                    amplitude -= 0.4;
                 }
             }
          }
