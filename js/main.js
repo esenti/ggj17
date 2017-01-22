@@ -457,9 +457,11 @@ makePopup = function(image) {
          }
      }
 
-     for(var i = 0; i < popups.length; i++) {
-        var popup = popups[i];
-        ctx.drawImage(images[popup.image], popup.x, popup.y, 50, 50);
+     if(currentLevel !== -1) {
+         for(var i = 0; i < popups.length; i++) {
+            var popup = popups[i];
+            ctx.drawImage(images[popup.image], popup.x, popup.y, 50, 50);
+         }
      }
  };
 
