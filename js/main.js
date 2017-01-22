@@ -233,24 +233,23 @@ Jebbable.prototype.draw = function(ctx) {
      var imageData = this.btx.getImageData(0, 0, this.cc.width, this.cc.height);
      var data = imageData.data;
 
+     this.btx.fillStyle = "#FFFFFF";
+     this.btx.fillRect(0, 0, this.cc.width, this.cc.height);
      var newImageData = this.btx.createImageData(this.cc.width, this.cc.height)
      var newData = newImageData.data;
 
-     for(var i = 0; i < newData.length; i += 4) {
-         newData[i] = 255;
-         newData[i + 1] = 255;
-         newData[i + 2] = 255;
-         newData[i + 3] = 0;
-     }
-
      if(amplitude < 8) {
+         var aff = 0;
+         var all = 0;
          for(var i = 0; i < data.length; i += 4) {
+             all++;
              var x = (i / 4) % this.cc.width;
              var y = Math.floor((i / 4) / this.cc.width);
 
-             if(data[i] !== 255) {
+             if(data[i] != 255) {
                  // WONSZ
                  y += Math.floor(Math.sin(x / 20 + elapsed * 5) * amplitude);
+                 aff++;
 
                  newData[4 * (y * this.cc.width + x) + 0] = data[i + 0]
                  newData[4 * (y * this.cc.width + x) + 1] = data[i + 1]
@@ -258,17 +257,22 @@ Jebbable.prototype.draw = function(ctx) {
                  newData[4 * (y * this.cc.width + x) + 3] = data[i + 3]
              }
          }
+         console.log("affected pixels: ", aff , "/", all);
      } else {
+         var aff = 0;
+         var all = 0;
          for(var x = 0; x < this.cc.width; x += 1) {
              for(var y = 0; y < this.cc.height; y += 1) {
                  var i = 4 * (y * this.cc.width + x);
                  var nx = x;
                  var ny = y;
+                 all++;
 
-                 if(data[i] != 255) {
+                 if(data[i + 3] > 0) {
                      // JEB
                      ny += yRandom()
                      nx += xRandom()
+                     aff++;
 
                      var j = 4 * (ny * this.cc.width + nx);
                      if(j + 3 < data.length) {
@@ -280,6 +284,8 @@ Jebbable.prototype.draw = function(ctx) {
                  }
              }
          }
+
+         console.log("affected pixels: ", aff , "/", all);
      }
 
      this.btx.putImageData(newImageData, 0, 0)
