@@ -105,6 +105,7 @@ resetPlayer = function() {
 }
 
 playerYs = [373, 526, 520, 300];
+levelPeriods = [2, 3, 2.5, 2];
 
 
 levels = [[
@@ -368,14 +369,15 @@ makePopup = function(image) {
          if(lastJumpTime) {
             jumpPeriod = elapsed - lastJumpTime;
 
-            error = (jumpPeriod - 2) * (jumpPeriod - 2)
+            targetPeriod = levelPeriods[currentLevel];
+            error = (jumpPeriod - targetPeriod) * (jumpPeriod - targetPeriod)
 
             console.log(error)
             if(error < 0.3) {
                 dir = 0;
-                amplitude += 1;
+                amplitude += 5;
             } else {
-                dir = jumpPeriod - 2;
+                dir = jumpPeriod - targetPeriod;
 
                 if(dir > 0) {
                     makePopup("snail")
