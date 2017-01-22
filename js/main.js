@@ -104,18 +104,25 @@ resetPlayer = function() {
     player.y = playerYs[currentLevel];
 }
 
-playerYs = [373, 520, 526, 300];
+playerYs = [373, 526, 520, 300];
 
 
 levels = [[
     new Wave(0, 100, 400),
-    new ParallaxThing("house3", 300, 80, -0.025),
     new ParallaxThing("house2", 540, 200, -0.1),
     new ParallaxThing("house1", 20, 360, -0.1),
+    new ParallaxThing("house3", 300, 80, -0.2),
     "player",
     new StaticThing("bridge/background", 0, 250),
     new StaticThing("bridge/base", 0, 250),
     new Jebbable(0, 250, 800, 500, ["bridge/cokol", "bridge/main", "bridge/lines"]),
+],
+[
+    new ParallaxThing("reichstag/plane", 70, 30, -0.5),
+    new ParallaxThing("reichstag/zeppelin", 70, 0, -0.4),
+    new Jebbable(-20, 10, 800, 600, ["reichstag/building"]),
+    "player",
+    new StaticThing("reichstag/background", 0, 0),
 ],
 [
     new ParallaxThing("trump/trump", 70, 0, -0.3),
@@ -124,13 +131,6 @@ levels = [[
     new StaticThing("trump/people", 0, 0),
     "player",
     new StaticThing("trump/background", 0, 0),
-],
-[
-    new ParallaxThing("reichstag/plane", 70, 30, -0.5),
-    new ParallaxThing("reichstag/zeppelin", 70, 0, -0.4),
-    new Jebbable(-20, 10, 800, 600, ["reichstag/building"]),
-    "player",
-    new StaticThing("reichstag/background", 0, 0),
 ],
 [
     "player",
