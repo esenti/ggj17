@@ -104,7 +104,7 @@ resetPlayer = function() {
     player.y = playerYs[currentLevel];
 }
 
-playerYs = [373, 520];
+playerYs = [373, 520, 526, 300];
 
 
 levels = [[
@@ -124,6 +124,16 @@ levels = [[
     new StaticThing("trump/people", 0, 0),
     "player",
     new StaticThing("trump/background", 0, 0),
+],
+[
+    new ParallaxThing("reichstag/plane", 70, 30, -0.5),
+    new ParallaxThing("reichstag/zeppelin", 70, 0, -0.4),
+    new Jebbable(-20, 10, 800, 600, ["reichstag/building"]),
+    "player",
+    new StaticThing("reichstag/background", 0, 0),
+],
+[
+    "player",
 ]];
 
 currentLevel = 0;
@@ -515,6 +525,11 @@ makePopup = function(image) {
  loadImage("trump/people");
  loadImage("trump/chopper");
  loadImage("trump/trump");
+
+ loadImage("reichstag/background");
+ loadImage("reichstag/building");
+ loadImage("reichstag/plane");
+ loadImage("reichstag/zeppelin");
 
  loadImage("snail");
  loadImage("rabbit");
