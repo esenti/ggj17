@@ -379,6 +379,8 @@ makePopup = function(image) {
      if(amplitude > 0) {
         if(amplitude < 8) {
             amplitude -= delta * 0.05
+        } else {
+            audios["ultimate_jeb"].play();
         }
      } else {
         amplitude = 0
@@ -480,6 +482,7 @@ makePopup = function(image) {
 
  loadMusic = function(name) {
     var m = new Audio("sounds/"+name+".ogg");
+    m.volume = 0.3;
     m.addEventListener("ended", function() {
         this.currentTime = 0;
         playRandomMusic();
@@ -521,6 +524,7 @@ makePopup = function(image) {
  loadImage("rabbit");
 
  audios["jeb"] = new Audio('sounds/jeb.ogg');
+ audios["ultimate_jeb"] = new Audio("sounds/ultimate_jeb.ogg");
 
  loadMusic("melody1");
 
